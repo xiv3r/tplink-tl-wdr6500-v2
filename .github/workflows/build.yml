@@ -21,18 +21,12 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y build-essential file libncurses-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip python3 python3-setuptools
-
         mkdir -p downloads
         cd downloads
-        
-        wget https://downloads.openwrt.org/releases/25.12.5/targets/ramips/mt76x8/openwrt-imagebuilder-25.12.5-ramips-mt76x8.Linux-x86_64.tar.zst
-        tar -xf openwrt-imagebuilder-*.tar.zst
-        
-        cd openwrt-imagebuilder-*/
-        
-        sed -i 's/disabled/okay/g' target/linux/ramips/dts/mt7628an_xiaomi_mi-router-4c.dts
-        
-        make image PROFILE="xiaomi_mi-router-4c" PACKAGES="apk-mbedtls base-files ca-bundle dropbear firewall4 fstools kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7603 kmod-nft-offload libc libgcc libustream-mbedtls logd mtd netifd nftables odhcp6c odhcpd-ipv6only ppp ppp-mod-pppoe swconfig uci uclient-fetch urandom-seed urngd wpad-basic-mbedtls uboot-envtools luci luci-app-attendedsysupgrade kmod-mt76 kmod-mtd-rw kmod-lib-lz4 zram-swap nano iw-full ip-full ethtool-full dnsmasq-full"
+        wget https://downloads.openwrt.org/releases/25.12.5/targets/ath79/generic/openwrt-imagebuilder-25.12.5-ath79-generic.Linux-x86_64.tar.zst
+        tar -xf openwrt-imagebuilder-*.tar.zst 
+        cd openwrt-imagebuilder-*/  
+        make image PROFILE="tplink_tl-wdr6500-v2" PACKAGES="apk-mbedtls base-files ca-bundle dnsmasq dropbear firewall4 fstools  kmod-gpio-button-hotplug kmod-nft-offload libc libgcc libustream-mbedtls logd mtd netifd nftables odhcp6c odhcpd-ipv6only ppp ppp-mod-pppoe procd-ujail swconfig uboot-envtools uci uclient-fetch urandom-seed urngd wpad-basic-mbedtls kmod-usb-core kmod-usb2 kmod-usb-ledtrig-usbport kmod-ath9k kmod-ath10k-ct ath10k-firmware-qca988x-ct luci kmod-mtd-rw nano zram-swap netdiscover"
         
     - name: Determine release tag
       id: get_tag
@@ -88,6 +82,6 @@ jobs:
       with:
         tag_name: ${{ steps.get_tag.outputs.tag_name }}
         files: |
-          downloads/openwrt-*/bin/targets/*.bin
+          downloads/openwrt-*/bin/targets/ath79/generic/*.bin
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
